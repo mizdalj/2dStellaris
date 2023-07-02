@@ -1,0 +1,81 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlanetSpawner : MonoBehaviour
+{
+    // The planet prefab
+    public GameObject planetPrefab;
+
+    // The list of PlanetData objects
+    public List<PlanetData> planetDataList;
+
+    // The number of planets to spawn
+    public int numberOfPlanets = 50;
+
+    // Range for the x and y positions of the planets
+    public float minX = -200;
+    public float maxX = 200;
+    public float minY = -200;
+    public float maxY = 200;
+
+    void Start()
+    {
+        SpawnPlanets();
+    }
+
+    void SpawnPlanets()
+    {
+        for (int i = 0; i < numberOfPlanets; i++)
+        {
+            // Instantiate a new planet
+            GameObject newPlanet = Instantiate(planetPrefab);
+
+            // Assign a random PlanetData from the list
+            PlanetData randomPlanetData = planetDataList[Random.Range(0, planetDataList.Count)];
+
+            // Get the Planet script attached to the new planet
+            Planet planetScript = newPlanet.GetComponent<Planet>();
+
+            // Assign the random PlanetData to the Planet script
+            planetScript.setPlanetData(randomPlanetData);
+
+            bool isColliding = true;
+            int retryCount = 0;
+            const int maxRetryCount = 100;
+
+            // Retry placing the planet if it collides with another one
+            while (isColliding && retryCount < maxRetryCount)
+            {
+                // Position the new planet at a random position within the defined range
+                newPlanet.transform.position = new Vector3(
+                    Random.Range(minX, maxX),
+                    Random.Range(minY, maxY),
+                    0
+                );
+
+                // Check for collisions with other planets
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(newPlanet.transform.position, 5f);
+
+                isColliding = false;
+                foreach (Collider2D collider in colliders)
+                {
+                    if (collider != newPlanet.GetComponent<Collider2D>())
+                    {
+                        isColliding = true;
+                        break;
+                    }
+                }
+
+                retryCount++;
+            }
+
+            if (isColliding)
+            {
+                Debug.LogWarning("Failed to find a non-colliding position for the planet after " + retryCount + " retries.");
+                Destroy(newPlanet);
+                continue; // Skip to the next iteration if no valid position is found
+            }
+        }
+    }
+}
