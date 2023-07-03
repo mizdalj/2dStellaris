@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planetName: Earth
   sprite: {fileID: 21300000, guid: 163bbc96f999da999986cfd64ba74186, type: 3}
-  food: 0
-  science: 0
-  industry: 0
-  energy: 0
-  districtLimit: 0
+  food: 30
+  science: 16
+  industry: 30
+  energy: 20
+  districtLimit: 10
   population: 0

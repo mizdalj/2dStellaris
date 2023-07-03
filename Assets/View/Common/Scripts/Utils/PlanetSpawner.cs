@@ -11,13 +11,13 @@ public class PlanetSpawner : MonoBehaviour
     public List<PlanetData> planetDataList;
 
     // The number of planets to spawn
-    public int numberOfPlanets = 10;
+    public int numberOfPlanets = 20;
 
     // Range for the x and y positions of the planets
-    public float minX = -30;
-    public float maxX = 30;
-    public float minY = -30;
-    public float maxY = 30;
+    public float minX = -50;
+    public float maxX = 50;
+    public float minY = -50;
+    public float maxY = 50;
 
     void Start()
     {
@@ -55,7 +55,7 @@ public class PlanetSpawner : MonoBehaviour
                 );
 
                 // Check for collisions with other planets
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(newPlanet.transform.position, planetScript.GetComponent<CircleCollider2D>().radius + 5f);
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(newPlanet.transform.position, planetScript.GetComponent<CircleCollider2D>().radius + 30f);
 
                 isColliding = false;
                 foreach (Collider2D collider in colliders)
