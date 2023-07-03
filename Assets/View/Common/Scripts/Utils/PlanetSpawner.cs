@@ -29,16 +29,27 @@ public class PlanetSpawner : MonoBehaviour
         for (int i = 0; i < numberOfPlanets; i++)
         {
             // Instantiate a new planet
-            GameObject newPlanet = Instantiate(planetPrefab);
+        	GameObject newPlanet = Instantiate(planetPrefab);
 
-            // Assign a random PlanetData from the list
-            PlanetData randomPlanetData = planetDataList[Random.Range(0, planetDataList.Count)];
+        	// Generate a random scale factor and apply it to the new planet
+        	float scaleFactor = Random.Range(0.5f, 1.5f);
+        	newPlanet.transform.localScale *= scaleFactor;
 
-            // Get the Planet script attached to the new planet
-            Planet planetScript = newPlanet.GetComponent<Planet>();
+        	// Assign a random PlanetData from the list
+        	PlanetData randomPlanetData = planetDataList[Random.Range(0, planetDataList.Count)];
 
-            // Assign the random PlanetData to the Planet script
-            planetScript.setPlanetData(randomPlanetData);
+        	// Scale the production stats of the PlanetData according to the scaleFactor
+        	randomPlanetData.food = Mathf.RoundToInt(randomPlanetData.food * scaleFactor);
+        	randomPlanetData.science = Mathf.RoundToInt(randomPlanetData.science * scaleFactor);
+        	randomPlanetData.industry = Mathf.RoundToInt(randomPlanetData.industry * scaleFactor);
+        	randomPlanetData.energy = Mathf.RoundToInt(randomPlanetData.energy * scaleFactor);
+        	randomPlanetData.districtLimit = Mathf.RoundToInt(randomPlanetData.districtLimit * scaleFactor);
+
+        	// Get the Planet script attached to the new planet
+        	Planet planetScript = newPlanet.GetComponent<Planet>();
+
+        	// Assign the modified PlanetData to the Planet script
+        	planetScript.setPlanetData(randomPlanetData);
 
             bool isColliding = true;
             int retryCount = 0;
